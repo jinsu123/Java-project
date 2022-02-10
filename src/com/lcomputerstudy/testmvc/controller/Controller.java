@@ -26,12 +26,14 @@ import com.lcomputerstudy.testmvc.vo.FileUpload;
 import com.lcomputerstudy.testmvc.vo.Pagination;
 import com.lcomputerstudy.testmvc.vo.Search;
 import com.lcomputerstudy.testmvc.vo.User;
+//import com.sun.tools.javac.jvm.Items;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-//import com.oreilly.servlet.MultipartRequest;
-//import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-//import com.oreilly.servlet.multipart.FileRenamePolicy;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.multipart.FileRenamePolicy;
 
 @WebServlet("*.do")
 public class Controller extends HttpServlet {
@@ -73,6 +75,8 @@ public class Controller extends HttpServlet {
 		boolean isRedirected = false;
 		FileUpload file = new FileUpload();
 		FileService fileService = null;
+		File uploadFile = null;
+		MultipartRequest mFile = null;
 		
 		
 		
@@ -184,10 +188,82 @@ public class Controller extends HttpServlet {
 				break;
 				
 			case "/board-insert-process.do":
+				
+				
+				
+				 String CHARSET = "utf-8";
+				 String ATTACHES_DIR = "C:\\Users\\금재민\\Documents\\workspace-spring-tool-suite-4-4.12.0.RELEASE\\lcomputerstudy2-2.10-apache\\WebContent\\img";
+				 int LIMIT_SIZE_BYTES = 1024 * 1024;
+
+
+			    response.setContentType("text/html; charset=UTF-8");
+		        request.setCharacterEncoding(CHARSET);
+		        PrintWriter out = response.getWriter();
+
+
+		 
+		        File attachesDir = new File(ATTACHES_DIR);
+		 
+		        if(ServletFileUpload.isMultipartContent(request)) {
+		        	
+		        
+		        DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
+		        fileItemFactory.setRepository(attachesDir);
+		        fileItemFactory.setSizeThreshold(LIMIT_SIZE_BYTES);
+		        ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);
+		 
+		 
+		        try {
+		            List<FileItem> items = fileUpload.parseRequest(request);
+		            for (FileItem item : items) {
+		                if (item.isFormField()) {
+		                    System.out.printf("파라미터 명 : %s, 파라미터 값 :  %s \n", item.getFieldName(), item.getString(CHARSET));
+		                } else {
+		                    System.out.printf("파라미터 명 : %s, 파일 명 : %s,  파일 크기 : %s bytes \n", item.getFieldName(),
+		                            item.getName(), item.getSize());
+		                    if (item.getSize() > 0) {
+		                        String separator = File.separator;
+		                        int index =  item.getName().lastIndexOf(separator);
+		                        String fileName = item.getName().substring(index  + 1);
+		                        uploadFile = new File(ATTACHES_DIR +  separator + fileName);
+		                        if(uploadFile.exists()) {
+		                        	for(int k=0; true; k++) {
+		                        		uploadFile = new File(ATTACHES_DIR,"("+k+")"+fileName);
+		                        		if(!uploadFile.exists()) {
+		                        			fileName = "("+k+")"+fileName;
+		                        			break;
+		                        			
+		                        		}
+		                        	}
+		                        }item.write(uploadFile);
+		                   }
+		               }
+		            }
+		            
+		 
+		 
+		           System.out.println("<h1>파일 업로드 완료</h1>");
+		 
+		 
+		        } catch (Exception e) {
+		            // 파일 업로드 처리 중 오류가 발생하는 경우
+		            e.printStackTrace();
+		           System.out.println("<h1>파일 업로드 중 오류가  발생하였습니다.</h1>");
+		        }
+		    }
+			fileService = FileService.getInstance();
+			fileService.insertFile(uploadFile);
+		        
+		 
+				
+				
+				
+				
+				
 				session = request.getSession();
 				user = (User)session.getAttribute("user");
 				board = new Board();
-				board.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
+//				board.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
 				board.setU_idx(user.getU_idx());
 				board.setB_title(request.getParameter("title"));
 				board.setB_content(request.getParameter("content"));
@@ -412,60 +488,89 @@ public class Controller extends HttpServlet {
 				break;
 		
 				
-			case "/fileUpload.do":
-				view = "fileUpload/fileUpload";	
-				break;
-		
-			case "/fileUpload-process.do":
-		
-				final String CHARSET = "utf-8";
-			    final String ATTACHES_DIR = "C:\\Users\\l2-evening\\Documents\\work10\\lcomputerstudy2-1.28 apache\\WebContent\\img";
-			    final int LIMIT_SIZE_BYTES = 1024 * 1024;
-
-
-		 
-		        File attachesDir = new File(ATTACHES_DIR);
-		 
-		 
-		        DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
-		        fileItemFactory.setRepository(attachesDir);
-		        fileItemFactory.setSizeThreshold(LIMIT_SIZE_BYTES);
-		        ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);
-		 
-		 
-		        try {
-		            List<FileItem> items = fileUpload.parseRequest(request);
-		            for (FileItem item : items) {
-		                if (item.isFormField()) {
-		                    System.out.printf("파라미터 명 : %s, 파라미터 값 :  %s \n", item.getFieldName(), item.getString(CHARSET));
-		                } else {
-		                    System.out.printf("파라미터 명 : %s, 파일 명 : %s,  파일 크기 : %s bytes \n", item.getFieldName(),
-		                            item.getName(), item.getSize());
-		                    if (item.getSize() > 0) {
-		                        String separator = File.separator;
-		                        int index =  item.getName().lastIndexOf(separator);
-		                        String fileName = item.getName().substring(index  + 1);
-		                        File uploadFile = new File(ATTACHES_DIR +  separator + fileName);
-		                        item.write(uploadFile);
-		                    }
-		                }
-		            }
-		 
-		 
-		            System.out.println("<h1>파일 업로드 완료</h1>");
-		 
-		 
-		        } catch (Exception e) {
-		            // 파일 업로드 처리 중 오류가 발생하는 경우
-		            e.printStackTrace();
-		            System.out.println("<h1>파일 업로드 중 오류가  발생하였습니다.</h1>");
-		        }
-		    
-		 
-				view = "fileUpload/filesu";
-				
-			
-				break;
+//			case "/fileUpload.do":
+//				view = "fileUpload/fileUpload";	
+//				break;
+//		
+//			case "/fileUpload-process.do":
+//		
+//				 String CHARSET = "utf-8";
+//				 String ATTACHES_DIR = "C:\\Users\\금재민\\Documents\\workspace-spring-tool-suite-4-4.12.0.RELEASE\\lcomputerstudy2-2.10-apache\\WebContent\\img";
+//				 int LIMIT_SIZE_BYTES = 1024 * 1024;
+//
+//
+//			    response.setContentType("text/html; charset=UTF-8");
+//		        request.setCharacterEncoding(CHARSET);
+//		        PrintWriter out = response.getWriter();
+//
+//
+//		 
+//		        File attachesDir = new File(ATTACHES_DIR);
+//		 
+//		 
+//		        DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
+//		        fileItemFactory.setRepository(attachesDir);
+//		        fileItemFactory.setSizeThreshold(LIMIT_SIZE_BYTES);
+//		        ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);
+//		 
+//		 
+//		        try {
+//		            List<FileItem> items = fileUpload.parseRequest(request);
+//		            for (FileItem item : items) {
+//		                if (item.isFormField()) {
+//		                    System.out.printf("파라미터 명 : %s, 파라미터 값 :  %s \n", item.getFieldName(), item.getString(CHARSET));
+//		                } else {
+//		                    System.out.printf("파라미터 명 : %s, 파일 명 : %s,  파일 크기 : %s bytes \n", item.getFieldName(),
+//		                            item.getName(), item.getSize());
+//		                    if (item.getSize() > 0) {
+//		                        String separator = File.separator;
+//		                        int index =  item.getName().lastIndexOf(separator);
+//		                        String fileName = item.getName().substring(index  + 1);
+//		                        uploadFile = new File(ATTACHES_DIR +  separator + fileName);
+//		                        if(uploadFile.exists()) {
+//		                        	for(int k=0; true; k++) {
+//		                        		uploadFile = new File(ATTACHES_DIR,"("+k+")"+fileName);
+//		                        		if(!uploadFile.exists()) {
+//		                        			fileName = "("+k+")"+fileName;
+//		                        			break;
+//		                        			
+//		                        		}
+//		                        	}
+//		                        }item.write(uploadFile);
+////		                        
+////		                        String fileName = item.getName();
+////		                        Date date = new Date();
+////		                        SimpleDateFormat today = new SimpleDateFormat("yyyyMMddHHmmss");
+////		                        if(new File(ATTACHES_DIR + fileName).exists()) {
+////		                        	ATTACHES_DIR += today.format(date) + "/";
+////		                        	new File(ATTACHES_DIR).mkdir();
+//		                        	  
+//		                      
+////		                        }
+//		                        
+//		                    
+//		                    }
+//		                }
+//		            }
+//		 
+//		 
+//		           System.out.println("<h1>파일 업로드 완료</h1>");
+//		 
+//		 
+//		        } catch (Exception e) {
+//		            // 파일 업로드 처리 중 오류가 발생하는 경우
+//		            e.printStackTrace();
+//		           System.out.println("<h1>파일 업로드 중 오류가  발생하였습니다.</h1>");
+//		        }
+//		    
+//			fileService = FileService.getInstance();
+//			fileService.insertFile(uploadFile);
+//		        
+//		 
+//				view = "fileUpload/filesu";
+//				
+//			
+//				break;
 		
 
 

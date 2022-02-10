@@ -1,5 +1,7 @@
 package com.lcomputerstudy.testmvc.service;
 
+import java.io.File;
+
 import com.lcomputerstudy.testmvc.dao.BoardDAO;
 import com.lcomputerstudy.testmvc.dao.FileDAO;
 import com.lcomputerstudy.testmvc.vo.FileUpload;
@@ -22,7 +24,7 @@ public class FileService {
 	}
 	
 	
-	public void insertFile(FileUpload fileupload) {
-		dao.insertFile(fileupload);
+	public void insertFile(File uploadFile) {
+		dao.insertFile(uploadFile);
 	}
 }

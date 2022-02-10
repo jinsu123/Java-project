@@ -23,16 +23,16 @@ public class FileDAO {
 		
 	}
 	
-	public void insertFile(FileUpload fileupload) {
+	public void insertFile(File uploadFile) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
 			conn = DBConnection.getConnection();
-			String sql = "insert into file( b_idx, f_name ) values(?,?)";
+			String sql = "insert into file(  f_name ) values(?)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, fileupload.getB_idx());
-			pstmt.setString(2, fileupload.getF_name());
+//			pstmt.setInt(1, uploadFile.getB_idx());
+			pstmt.setString(1, uploadFile.getName());
 			pstmt.executeUpdate();
 			
 		}catch(Exception ex) {
