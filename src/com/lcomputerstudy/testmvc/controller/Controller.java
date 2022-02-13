@@ -79,7 +79,6 @@ public class Controller extends HttpServlet {
 		MultipartRequest mFile = null;
 		
 		
-		
 		command = checkSession(request, response, command);
 		
 	
@@ -189,7 +188,8 @@ public class Controller extends HttpServlet {
 				
 			case "/board-insert-process.do":
 				
-				
+				boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+				if(isMultipart) {
 				
 				 String CHARSET = "utf-8";
 				 String ATTACHES_DIR = "C:\\Users\\금재민\\Documents\\workspace-spring-tool-suite-4-4.12.0.RELEASE\\lcomputerstudy2-2.10-apache\\WebContent\\img";
@@ -204,20 +204,72 @@ public class Controller extends HttpServlet {
 		 
 		        File attachesDir = new File(ATTACHES_DIR);
 		 
-		        if(ServletFileUpload.isMultipartContent(request)) {
 		        	
 		        
 		        DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
 		        fileItemFactory.setRepository(attachesDir);
 		        fileItemFactory.setSizeThreshold(LIMIT_SIZE_BYTES);
 		        ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);
-		 
-		 
+		    	
+//		        session = request.getSession();
+//				user = (User)session.getAttribute("user");
+//				board = new Board();
+//				board.setU_idx(user.getU_idx());
+//				board.setB_date(sDate.format(new Date()));
+//				board.setB_title(request.getParameter("title"));
+//				board.setB_content(request.getParameter("content"));
+//				board.setB_writer(request.getParameter("wirter"));
+//		      
 		        try {
 		            List<FileItem> items = fileUpload.parseRequest(request);
 		            for (FileItem item : items) {
+		            	
+		           
+		            	
 		                if (item.isFormField()) {
 		                    System.out.printf("파라미터 명 : %s, 파라미터 값 :  %s \n", item.getFieldName(), item.getString(CHARSET));
+		               
+		                
+
+//		    				String title = item.getString(CHARSET);
+//		    				board.setB_title(title);
+//		    				String content = item.getString(CHARSET);
+//		    				board.setB_content(content);
+//		    				String writer = item.getString(CHARSET);
+//		    				board.setB_writer(writer);
+////		    				String b_group = item.getString(CHARSET);
+////		    				board.setB_group(b_group);
+////		    				String b_order = item.getString(CHARSET);
+////		    				board.setB_title(b_order);
+////		    				String b_depth = item.getString(CHARSET);
+////		    				board.setB_depth(b_depth);
+		    				
+		    				
+//		    				switch(item.getFieldName()) {
+//		    				
+//		    			
+//		    			
+//		    				
+//		    				case "b_group" : String b_group = item.getString(CHARSET);
+//	    						board.setB_title(b_group);
+//	    						break;
+//		    				
+//		    				case "b_order" : String b_order = item.getString(CHARSET);
+//	    						board.setB_title(b_order);
+//	    						break;
+//		    				}	
+	    						
+		    				
+		    				
+		    				
+		    				
+
+		    				
+		    				
+		    				
+		    				
+		    				
+		    				
 		                } else {
 		                    System.out.printf("파라미터 명 : %s, 파일 명 : %s,  파일 크기 : %s bytes \n", item.getFieldName(),
 		                            item.getName(), item.getSize());
@@ -235,8 +287,13 @@ public class Controller extends HttpServlet {
 		                        			
 		                        		}
 		                        	}
-		                        }item.write(uploadFile);
-		                   }
+		                        }
+		                        
+		                    
+		                        
+		                        item.write(uploadFile);
+		                        
+		                    }
 		               }
 		            }
 		            
@@ -245,34 +302,36 @@ public class Controller extends HttpServlet {
 		           System.out.println("<h1>파일 업로드 완료</h1>");
 		 
 		 
-		        } catch (Exception e) {
-		            // 파일 업로드 처리 중 오류가 발생하는 경우
-		            e.printStackTrace();
-		           System.out.println("<h1>파일 업로드 중 오류가  발생하였습니다.</h1>");
-		        }
-		    }
-			fileService = FileService.getInstance();
-			fileService.insertFile(uploadFile);
-		        
+			        } catch (Exception e) {
+			            // 파일 업로드 처리 중 오류가 발생하는 경우
+			            e.printStackTrace();
+			           System.out.println("<h1>파일 업로드 중 오류가  발생하였습니다.</h1>");
+			        }
+				}
+				fileService = FileService.getInstance();
+				fileService.insertFile(uploadFile);
+			        
 		 
 				
 				
 				
 				
 				
-				session = request.getSession();
-				user = (User)session.getAttribute("user");
-				board = new Board();
-//				board.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
-				board.setU_idx(user.getU_idx());
-				board.setB_title(request.getParameter("title"));
-				board.setB_content(request.getParameter("content"));
-				board.setB_writer(request.getParameter("writer"));
-				board.setB_group(Integer.parseInt(request.getParameter("b_group")));
-				board.setB_order(Integer.parseInt(request.getParameter("b_order")));
-				board.setB_depth(Integer.parseInt(request.getParameter("b_depth")));
-				board.setB_date(sDate.format(new Date()));
-//				board.setB_view(Integer.parseInt(request.getParameter("view")));
+//				session = request.getSession();
+//				user = (User)session.getAttribute("user");
+//				board = new Board();
+////				board.setU_idx(Integer.parseInt(request.getParameter("u_idx")));
+//				board.setU_idx(user.getU_idx());
+////				board.setB_title(request.getParameter("title"));
+//				String title = request.getParameter("title");
+//				board.setB_title(title);
+//				board.setB_content(request.getParameter("content"));
+//				board.setB_writer(request.getParameter("writer"));
+//				board.setB_group(Integer.parseInt(request.getParameter("b_group")));
+//				board.setB_order(Integer.parseInt(request.getParameter("b_order")));
+//				board.setB_depth(Integer.parseInt(request.getParameter("b_depth")));
+//				board.setB_date(sDate.format(new Date()));
+////				board.setB_view(Integer.parseInt(request.getParameter("view")));
 				
 				boardService = BoardService.getInstance();
 				boardService.insertBoard(board);
