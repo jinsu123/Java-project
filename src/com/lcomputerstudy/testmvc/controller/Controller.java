@@ -192,7 +192,7 @@ public class Controller extends HttpServlet {
 				if(isMultipart) {
 				
 				 String CHARSET = "utf-8";
-				 String ATTACHES_DIR = "C:\\Users\\l2-evening\\Documents\\work10\\lcomputerstudy2-2.10 apache\\WebContent\\img";
+				 String ATTACHES_DIR = "C:\\Users\\금재민\\Documents\\workspace-spring-tool-suite-4-4.12.0.RELEASE\\lcomputerstudy2-2.10-apache\\WebContent\\img";
 				 int LIMIT_SIZE_BYTES = 1024 * 1024;
 
 
@@ -220,7 +220,7 @@ public class Controller extends HttpServlet {
 		        try {
 		            List<FileItem> items = fileUpload.parseRequest(request);
 		            String title ="", content="", writer="",b_group="",b_order="",b_depth="";
-		           
+		            ArrayList list10 = new ArrayList();
 		            for (FileItem item : items) {
 		            	
 		            	
@@ -271,24 +271,32 @@ public class Controller extends HttpServlet {
 		                        		if(!uploadFile.exists()) {
 		                        			fileName = "("+k+")"+fileName;
 		                        			
+		                        		
 		                        			break;
 		                        			
 		                        		}
 		                        	}
 		                        }
 		                        
-		                    	fileService = FileService.getInstance();
-		        				fileService.insertFile(uploadFile);
+		                    
 		                        
 		                        item.write(uploadFile);
-		                        
+		                        list10.add(uploadFile);
+//		                        System.out.print(list10);
 		                        //boardFile = new BoardFile();
 		                        //boardFileList.add(boardFile)
 		                        
 		                    }
 		               }
 		            }
-		          
+		            boardService = BoardService.getInstance();
+					boardService.insertBoard(board);
+					  for (int i = 0; i < list10.size(); ++i) {
+						  fileService = FileService.getInstance();
+						  uploadFile=(File) list10.get(i);
+						  fileService.insertFile(uploadFile);
+					  }
+					
 		 
 		           System.out.println("<h1>파일 업로드 완료</h1>");
 		 
