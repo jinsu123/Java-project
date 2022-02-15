@@ -28,8 +28,8 @@ public class BoardService {
 //			return dao.getBoards();
 //		}
 		
-		public void insertBoard(Board board) {
-			dao.insertBoard(board);
+		public Board insertBoard(Board board) {
+			return dao.insertBoard(board);
 		}
 		
 		public Board detailBoard(int b_idx) {

@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.lcomputerstudy.testmvc.dao.BoardDAO;
 import com.lcomputerstudy.testmvc.dao.FileDAO;
+import com.lcomputerstudy.testmvc.vo.Board;
 import com.lcomputerstudy.testmvc.vo.FileUpload;
 
 public class FileService {
@@ -24,7 +25,7 @@ public class FileService {
 	}
 	
 	
-	public void insertFile(File uploadFile) {
-		dao.insertFile(uploadFile);
+	public void insertFile(File uploadFile, Board board) {
+		dao.insertFile(uploadFile,board);
 	}
 }

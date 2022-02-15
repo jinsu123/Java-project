@@ -192,7 +192,8 @@ public class Controller extends HttpServlet {
 				if(isMultipart) {
 				
 				 String CHARSET = "utf-8";
-				 String ATTACHES_DIR = "C:\\Users\\금재민\\Documents\\workspace-spring-tool-suite-4-4.12.0.RELEASE\\lcomputerstudy2-2.10-apache\\WebContent\\img";
+				 String ATTACHES_DIR = "C:\\Users\\l2-evening\\Documents\\work10\\lcomputerstudy2-2.10 apache\\WebContent\\img";
+				 
 				 int LIMIT_SIZE_BYTES = 1024 * 1024;
 
 
@@ -282,7 +283,6 @@ public class Controller extends HttpServlet {
 		                        
 		                        item.write(uploadFile);
 		                        list10.add(uploadFile);
-//		                        System.out.print(list10);
 		                        //boardFile = new BoardFile();
 		                        //boardFileList.add(boardFile)
 		                        
@@ -290,11 +290,11 @@ public class Controller extends HttpServlet {
 		               }
 		            }
 		            boardService = BoardService.getInstance();
-					boardService.insertBoard(board);
+		            board=boardService.insertBoard(board);
 					  for (int i = 0; i < list10.size(); ++i) {
 						  fileService = FileService.getInstance();
 						  uploadFile=(File) list10.get(i);
-						  fileService.insertFile(uploadFile);
+						  fileService.insertFile(uploadFile,board);
 					  }
 					
 		 
