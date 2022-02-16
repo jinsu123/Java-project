@@ -73,10 +73,9 @@
 </table>
 <br>
 <p>첨부파일</p>
-<c:forEach items="${file}" var="file" varStatus="status">
-<img alt="${file.getName()}"scr="/lcomputerstudy/img/${file}">
+<c:forEach items="${file}" var="fload">
+<p><img src="/lcomputerstudy/img/${fload.f_name}" height="200" width="200"></p>
 </c:forEach>
-<p></p>
 <br>
 	<c:if test="${sessionScope.user.u_name == board.user.u_name }">
 	<tr style="height:50px;">

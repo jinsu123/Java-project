@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.lcomputerstudy.testmvc.database.DBConnection;
 import com.lcomputerstudy.testmvc.vo.Board;
@@ -62,11 +63,12 @@ public class FileDAO {
 	}
 	
 	
-	public FileUpload detailFileUpload(int b_idx) {
+	public ArrayList<FileUpload> detailFileUpload(int b_idx) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		FileUpload file = null;
+		ArrayList<FileUpload> list = null;
 		
 		try {
 			conn = DBConnection.getConnection();
@@ -74,12 +76,13 @@ public class FileDAO {
 			pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, b_idx);
 			rs = pstmt.executeQuery();
-			
+			list = new ArrayList<FileUpload>();
 			while(rs.next()) {
 				file = new FileUpload();
 				file.setB_idx(rs.getInt("b_idx"));
 				file.setF_name(rs.getString("f_name"));
 				
+				list.add(file);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -92,7 +95,7 @@ public class FileDAO {
 				e.printStackTrace();
 			}
 		}
-		return file;
+		return list;
 	}
 	
 }

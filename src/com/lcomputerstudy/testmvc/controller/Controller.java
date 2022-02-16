@@ -192,8 +192,8 @@ public class Controller extends HttpServlet {
 				boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 				if(isMultipart) {
 				
-				 String CHARSET = "utf-8";
-				 String ATTACHES_DIR = "C:\\Users\\l2-evening\\Documents\\work10\\lcomputerstudy2-2.10 apache\\WebContent\\img";
+				 String CHARSET = "UTF-8";
+				 String ATTACHES_DIR = "C:\\Users\\금재민\\Documents\\workspace-spring-tool-suite-4-4.12.0.RELEASE\\lcomputerstudy2-2.10-apache\\WebContent\\img";
 				 
 				 int LIMIT_SIZE_BYTES = 1024 * 1024;
 
@@ -256,6 +256,11 @@ public class Controller extends HttpServlet {
 			                	board.setB_depth(Integer.parseInt(b_depth));
 		                	}
 		                	
+//		                	String origName; 
+//		                	origName = new String(multipartfile.getOriginalFilename().getBytes("8859_1"), "UTF-8");
+
+//		                	String str = new String(StringUtil.nvl(item).getBytes("8859_1"),"utf-8");
+//		                	String convertName = new String(.getBytes("8859_1"), "UTF-8");
 		                    System.out.printf("파라미터 명 : %s, 파라미터 값 :  %s \n", item.getFieldName(),item.getString(CHARSET));
 		                    
 		    				
@@ -269,9 +274,9 @@ public class Controller extends HttpServlet {
 		                        uploadFile = new File(ATTACHES_DIR +  separator + fileName);
 		                        if(uploadFile.exists()) {
 		                        	for(int k=0; true; k++) {
-		                        		uploadFile = new File(ATTACHES_DIR,"("+k+")"+fileName);
+		                        		uploadFile = new File(ATTACHES_DIR,k+"_"+fileName);
 		                        		if(!uploadFile.exists()) {
-		                        			fileName = "("+k+")"+fileName;
+		                        			fileName = k+"_"+fileName;
 		                        			
 		                        		
 		                        			break;
@@ -327,6 +332,9 @@ public class Controller extends HttpServlet {
 				BoardService boardService1 = BoardService.getInstance();
 				board = boardService1.detailBoard(b_idx);
 				
+				b_idx = Integer.parseInt(request.getParameter("b_idx"));
+				FileService fileService1 = FileService.getInstance();
+				ArrayList<FileUpload>file1 = fileService1.detailFileUpload(b_idx);
 				
 				String reqPage5 = request.getParameter("page");
 				if(reqPage5 != null) {
@@ -349,7 +357,7 @@ public class Controller extends HttpServlet {
 							
 				
 				
-//				request.setAttribute("file", uploadedFiles);
+				request.setAttribute("file", file1);
 				request.setAttribute("list", list5);
 				request.setAttribute("pagination", pagination);	
 				request.setAttribute("board", board);

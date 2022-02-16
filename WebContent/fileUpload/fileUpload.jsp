@@ -7,7 +7,7 @@
 <title>파일 업로드</title>
 </head>
 <body>
-<form action="fileUpload-process.do" method="post" enctype="multipart/form-data">
+<form action="fileUpload-process.do" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
 	<input type="hidden" name="b_group" value="${board.b_group}">
 	<input type="hidden" name="b_order" value="${board.b_order}">
 	<input type="hidden" name="b_depth" value="${board.b_depth}">

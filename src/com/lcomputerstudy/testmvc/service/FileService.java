@@ -1,6 +1,7 @@
 package com.lcomputerstudy.testmvc.service;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import com.lcomputerstudy.testmvc.dao.BoardDAO;
 import com.lcomputerstudy.testmvc.dao.FileDAO;
@@ -29,7 +30,7 @@ public class FileService {
 		dao.insertFile(uploadFile,board);
 	}
 	
-	public FileUpload detailFileUpload(int b_idx) {
+	public ArrayList<FileUpload> detailFileUpload(int b_idx) {
 		return dao.detailFileUpload(b_idx);
 	}
 	
