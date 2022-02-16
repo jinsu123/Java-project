@@ -35,6 +35,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 
+
 @WebServlet("*.do")
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -255,7 +256,7 @@ public class Controller extends HttpServlet {
 			                	board.setB_depth(Integer.parseInt(b_depth));
 		                	}
 		                	
-		                    System.out.printf("파라미터 명 : %s, 파라미터 값 :  %s \n", item.getFieldName(), item.getString(CHARSET));
+		                    System.out.printf("파라미터 명 : %s, 파라미터 값 :  %s \n", item.getFieldName(),item.getString(CHARSET));
 		                    
 		    				
 		                } else {
@@ -343,6 +344,12 @@ public class Controller extends HttpServlet {
 				count = commentService.getCommentsCount(search, board);
 				pagination = new Pagination(page,count,search);
 				ArrayList<Comment> list5 = commentService.getComments(pagination, board);
+				
+				
+							
+				
+				
+//				request.setAttribute("file", uploadedFiles);
 				request.setAttribute("list", list5);
 				request.setAttribute("pagination", pagination);	
 				request.setAttribute("board", board);

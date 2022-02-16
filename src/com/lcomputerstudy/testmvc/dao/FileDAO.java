@@ -3,11 +3,13 @@ package com.lcomputerstudy.testmvc.dao;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.lcomputerstudy.testmvc.database.DBConnection;
 import com.lcomputerstudy.testmvc.vo.Board;
 import com.lcomputerstudy.testmvc.vo.FileUpload;
+import com.lcomputerstudy.testmvc.vo.User;
 
 public class FileDAO {
 	private static FileDAO dao = null;
@@ -58,4 +60,39 @@ public class FileDAO {
 		}
 
 	}
+	
+	
+	public FileUpload detailFileUpload(int b_idx) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		FileUpload file = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			String query = "select * from file where b_idx=?";
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, b_idx);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				file = new FileUpload();
+				file.setB_idx(rs.getInt("b_idx"));
+				file.setF_name(rs.getString("f_name"));
+				
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return file;
+	}
+	
 }

@@ -28,4 +28,9 @@ public class FileService {
 	public void insertFile(File uploadFile, Board board) {
 		dao.insertFile(uploadFile,board);
 	}
+	
+	public FileUpload detailFileUpload(int b_idx) {
+		return dao.detailFileUpload(b_idx);
+	}
+	
 }

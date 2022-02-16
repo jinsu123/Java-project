@@ -70,17 +70,25 @@
 		<td>조회수</td>
 		<td>${board.b_view}</td>
 	</tr>
+</table>
+<br>
+<p>첨부파일</p>
+<c:forEach items="${file}" var="file" varStatus="status">
+<img alt="${file.getName()}"scr="/lcomputerstudy/img/${file}">
+</c:forEach>
+<p></p>
+<br>
 	<c:if test="${sessionScope.user.u_name == board.user.u_name }">
 	<tr style="height:50px;">
 		<td style="border:none;">
-			<p style="width:70%; font-weight:700;background-color:#818181;color:#fff;"><a href="/lcomputerstudy/board-edit.do?b_idx=${board.b_idx}">수정</a></p>
+			<p style="width:5%; font-weight:700;background-color:#818181;color:#fff;"><a href="/lcomputerstudy/board-edit.do?b_idx=${board.b_idx}">수정</a></p>
 		</td>
 		<td style="border:none;">
-			<p style="width:70%; font-weight:700;background-color:red;color:#fff;"><a href="/lcomputerstudy/board-delete.do?b_idx=${board.b_idx}">삭제</a></p>
+			<p style="width:5%; font-weight:700;background-color:red;color:#fff;"><a href="/lcomputerstudy/board-delete.do?b_idx=${board.b_idx}">삭제</a></p>
 		</td>
 	</tr>
 	</c:if>
-</table>
+<br>
 <c:if test="${sessionScope.user.u_name != null}">
 <p style="width:4%; font-weight:700;background-color:#818181;color:#fff;"><a href="/lcomputerstudy/board-insert.do?b_group=${board.b_group}&b_order=${board.b_order}&b_depth=${board.b_depth}">답글쓰기</a></p>
 </c:if>
